@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="C:\Users\hp\Desktop\data_science\email project\static\style.css" />
+        <title>Email Classification Project</title>
+    </head>
+    <body>
+        <div id="project_form">
+        <h2 style="text-align:center">Email Classification Project</h2>
+        <hr>
+            <div class="container">
+        <form action="{{ url_for('predict') }}" method="post">
+            <label for="">Email-text:</label>
+                <input  type="text" placeholder="Enter Email :" name="email" required></input>
+            <br><br>
+            
+            <button type="submit">Submit</button>
+        </div>
+        </form>
+    </div>
+    </body>
+</html>
