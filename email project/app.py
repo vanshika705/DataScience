@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, url_for
-# import sqlite3
-# import joblib
+import joblib 
+
+bow_obj = joblib.load("./models/bag_of_words.lb")
+model = joblib.load("./models/bernouliNB.lb")
 
 app = Flask(__name__)
 
@@ -8,36 +10,17 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
-@app.route("/project")
-def project():
-    return render_template("project.html")
-
-@app.route("/predict",methods=["GET","POST"])
-def predict():
+@app.route("/prediction",methods=["POST","GET"])
+def prediction():
     if request.method == "POST":
-        # to recieve the data 
-        email = (request.form["email"])
-
-    # unseen_data = [[age, gender_type, bmi, children, smoker_type, health_type, region_northeast, region_northwest, region_southeast, region_southwest]]
-    
-    # prediction = str(random_forest.predict(unseen_data)[0])
-    # print(prediction)
-    
-    # connection = sqlite3.connect("insurance.db")
-    # cur = connection.cursor()
-    
-    # Data = (age, gender, bmi, children, region, smoker, health, prediction)
-    # cur.execute(data_insert_query, Data)
-    # print("Your data is inserted into database : ",Data)
-    # connection.commit()
-    # cur.close()
-    # connection.close()
-    
-    
-    # return render_template("final.html", output = prediction)
+        message = str(request.form["message"])
+        email_message = [message]
+        email_converted = bow_obj.transform(email_message).toarray()        
+        prediction = model.predict(email_converted)[0]
+        label_dict = {"0":"ham","1":"spam"}
+        # print(label_dict[str(prediction)])
+        return render_template("output.html", output = label_dict[str(prediction)])
     
 if __name__ == "__main__":
     app.run(debug=True)
-    
-
     
